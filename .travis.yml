@@ -1,0 +1,8 @@
+language: python
+
+services:
+  - docker
+
+script:
+  - docker build . --file Dockerfile --tag sysdiglabs/dummy-vuln-app:latest
+  - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --user 1001:1001 quay.io/sysdig/secure-inline-scan:2 sysdiglabs/dummy-vuln-app:latest --sysdig-token $SYSDIG_SECURE_TOKEN --sysdig-url $SYSDIG_SECURE_URL
