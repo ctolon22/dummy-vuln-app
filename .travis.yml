@@ -3,10 +3,12 @@ language: python
 services:
   - docker
 
+virt: vm
+
 env:
 - IMAGE_FULL_REPO: sysdiglabs/dummy-vuln-app-travis
 
 script:
   - export IMAGE_TAG=`echo $((1 + $RANDOM % 100000))`
   - docker build . --file Dockerfile --tag $IMAGE_FULL_REPO:$IMAGE_TAG
-  - docker run --rm --user 1001:1001 quay.io/sysdig/secure-inline-scan:2 $IMAGE_FULL_REPO:$IMAGE_TAG --sysdig-token $SYSDIG_SECURE_TOKEN --sysdig-url $SYSDIG_SECURE_URL --storage-type docker-daemon
+  - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --user 1001:1001 quay.io/sysdig/secure-inline-scan:2 $IMAGE_FULL_REPO:$IMAGE_TAG --sysdig-token $SYSDIG_SECURE_TOKEN --sysdig-url $SYSDIG_SECURE_URL --storage-type docker-daemon
