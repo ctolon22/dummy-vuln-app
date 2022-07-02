@@ -13,4 +13,4 @@ script:
   - docker build . --file Dockerfile --tag $IMAGE_FULL_REPO:$IMAGE_TAG
   - docker save $IMAGE_FULL_REPO:$IMAGE_TAG -o myimage.tar # Requires to save as travis-ci.com does not allow to mount Docker socket
   - mkdir -p /tmp/images && mv myimage.tar /tmp/images
-  - docker run --rm -v /tmp/images/:/tmp/images/ quay.io/sysdig/secure-inline-scan:2 $IMAGE_FULL_REPO:$IMAGE_TAG --sysdig-token $SYSDIG_SECURE_TOKEN --sysdig-url $SYSDIG_SECURE_URL --storage-type docker-archive --storage-path /tmp/images/myimage.tar
+  - docker run --rm -u $(id -u) -v /tmp/images/:/tmp/images/ quay.io/sysdig/secure-inline-scan:2 $IMAGE_FULL_REPO:$IMAGE_TAG --sysdig-token $SYSDIG_SECURE_TOKEN --sysdig-url $SYSDIG_SECURE_URL --storage-type docker-archive --storage-path /tmp/images/myimage.tar
